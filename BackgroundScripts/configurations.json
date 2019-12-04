@@ -1,0 +1,16 @@
+{
+  "exclude": [
+    "**/bin",
+    "**/bower_components",
+    "**/jspm_packages",
+    "**/node_modules",
+    "**/obj",
+    "**/platforms"
+  ],
+
+  "Configurations": {
+    "BanDomain": "ban_domain.ps1",
+    "UnbanDomain": "unban_domain.ps1",
+    "SendEmail": "send_email_anonymous.ps1"
+  }
+}
