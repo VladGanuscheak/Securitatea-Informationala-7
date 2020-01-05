@@ -35,7 +35,7 @@ namespace BackgroundScripts
                         process.StartInfo = new ProcessStartInfo
                         {
                             FileName = @"C:\Program Files\PowerShell\6\pwsh.exe",
-                            Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"{_pathProvider.MapPath($@"Scripts\ban_domain.ps1")} -domain {domainName}" : $"{_pathProvider.MapPath($@"Scripts\ban_domain_iptables.sh")}",
+                            Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"{_pathProvider.MapPath($@"Scripts\Block_host_script.ps1")} -domain {domainName}" : $"{_pathProvider.MapPath($@"Scripts\ban_domain_iptables.sh")}",
                             RedirectStandardOutput = true,
                             RedirectStandardError = true,
                             UseShellExecute = false,
@@ -107,7 +107,7 @@ namespace BackgroundScripts
                         process.StartInfo = new ProcessStartInfo
                         {
                             FileName = @"C:\Program Files\PowerShell\6\pwsh.exe",
-                            Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"{_pathProvider.MapPath($@"Scripts\unban_domain.ps1")} -domain {domainName}" : $"{_pathProvider.MapPath($@"Scripts\unban_domain_iptables.sh")}",
+                            Arguments = RuntimeInformation.IsOSPlatform(OSPlatform.Windows) ? $"{_pathProvider.MapPath($@"Scripts\Unblock_host_script.ps1")} -domain {domainName}" : $"{_pathProvider.MapPath($@"Scripts\unban_domain_iptables.sh")}",
                             RedirectStandardOutput = true,
                             RedirectStandardError = true,
                             UseShellExecute = false,

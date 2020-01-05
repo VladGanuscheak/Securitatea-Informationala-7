@@ -23,6 +23,8 @@ namespace Encryption.Controllers
         private readonly IBackgroundScripts _backgroundScripts;
         private readonly IGenericRepositoryAsync<ApplicationUser> _repository;
 
+        private static string sysUser = string.Empty;
+
         public HomeController(IEncryptor encryptor, IBackgroundScripts backgrounfScripts, 
             IGenericRepositoryAsync<ApplicationUser> repository)
         {
@@ -61,20 +63,50 @@ namespace Encryption.Controllers
 
             try
             {
-                var userName = await _encryptor.DecryptFromFileAsync($"C:\\temp\\TempFiles\\{file.FileName}");
-                var user = await _repository.GetListAsync(x => x.Name.ToLower() == userName.ToLower());
+                var content = await _encryptor.DecryptFromFileAsync($"C:\\temp\\TempFiles\\{file.FileName}");
+                var userName = $"{content.Split()[0]} {content.Split()[1]}";
+                var password = content.Split()[2];
+                var user = await _repository.GetListAsync(x => x.Name.ToLower() == userName.ToLower() && x.Password == password);
                 if (user.Count() == 1)
                 {
                     ViewBag.Result = $@"Hello, {userName} !";
                 }
+                sysUser = userName;
             }
             catch(Exception exception)
             {
+                sysUser = string.Empty;
                 ViewBag.Result = $@"Error!!!";
                 Debug.WriteLine(exception.Message);
             }
 
             return View();
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> BanDomain(string domain)
+        {
+            if (sysUser != string.Empty)
+            {
+                await _backgroundScripts.BanDomain(domain);
+                ViewBag.Result = $@"Dear {sysUser}, you have blocked the {domain}!";
+            }
+            else ViewBag.Result = "You need to authenticate!";
+
+            return RedirectToAction("Index", "Home");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> UnbanDomain(string domain)
+        {
+            if (sysUser != string.Empty)
+            {
+                await _backgroundScripts.UnbanDomain(domain);
+                ViewBag.Result = $@"Dear {sysUser}, you have unblocked the {domain}!";
+            }
+            else ViewBag.Result = "You need to authenticate!";
+
+            return RedirectToAction("Index", "Home");
         }
     }
 }
